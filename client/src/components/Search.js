@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../utils/API";
 
-function Search(){
+function Search() {
     const [search, setSearch] = useState({input: ""})
     const [currentSearch, setCurrentSearch] = useState([])
 
@@ -10,20 +10,22 @@ function Search(){
         setSearch({[name]: value})
     }
     useEffect(() => {
-        initialLoad()
+        // initialLoad()
     }, [])
 
-    function initialLoad() {
-        API.bookSearch("The Hunger Games")
-          .then(res =>
-             setCurrentSearch(res.data) 
-          )
-          .catch(err => console.log(err))
-    }
+    // function initialLoad() {
+    //     API.bookSearch("Lord of the Rings")
+    //       .then(res =>
+    //          setCurrentSearch(res.data.items) 
+    //       )
+    //       .catch(err => console.log(err))
+    // }
+
     function handleSubmit(event) {
         event.preventDefault();
+        // console.log(search);
         API.bookSearch(search.input)
-          .then(res => setCurrentSearch(res.data))
+          .then(res => setCurrentSearch(res.data.items))
           .catch(err => console.log(err))
     }
 
@@ -50,15 +52,16 @@ function Search(){
         <div>
         {currentSearch.length ? (
         <div>
-        {currentSearch.items.map(element => {
+        {currentSearch.map(element => {
             return (
                 <div className="card container mt-5">
             <div className="card-body col-lg-12">
                 <h5 className="card-title">{element.volumeInfo.title}</h5>
-                <h6 className="card-subtitle mb-2 text-muted">{element.volumeInfo.authors[0]}</h6>
+                {/* Author Image Save Link */}
+                <h6 className="card-subtitle mb-2 text-muted">{element.volumeInfo.authors}</h6>
                 <div className="row">
                 <div className="col-lg-2">
-                    <img src=""/>
+                    <img src={"https://via.placeholder.com/150"}/>
                 </div>
                 <div className="col-lg-8">
                     <p className="card-text">{element.volumeInfo.description}</p>
@@ -74,12 +77,11 @@ function Search(){
         })}
         </div>
         ) : (
-            <h3 className="text-center"> Search for a book nerd!</h3>
+            <h3 className="text-center"> Search for some books!</h3>
         )}
     </div>
     </>
     )
 }
-
 
 export default Search
